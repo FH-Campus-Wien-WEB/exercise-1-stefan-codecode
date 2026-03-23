@@ -7,20 +7,131 @@
     <title>Movies!</title>
     <style>
         /* Part 3: Your styling goes here */
-    </style>
-    <script>
-        function reverseString(s) {
-            return s.split("").reverse().join("");
+        body{
+            font-family:'Trebuchet MS', Helvetica, Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+        img{
+            border-radius: 6px;
+            max-width: 100%;
+            margin: 10px;
+        }
+        img:hover {
+            transform: scale(1.05); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        h1{
+            font-weight: bold;
+            margin: 10px;
+            color: chocolate;
+        }
+        article{
+            background-color: rgb(80, 153, 153);
+            border-radius: 2px;
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-bottom: 40px;
+            padding: 5px;
+            box-shadow: 1px;
+        }
+        header{
+            background-color: rgb(70, 117, 117);
+            margin: 5px;
+            padding: 5px;
+        }
+        section{
+            padding: 15px;            
+        }
+        h2{
+            color: chocolate;
+        }
+        .border{
+            border-bottom: 2px solid black;
         }
 
+
+    </style>
+    <script>
         window.onload = function () {
             const xhr = new XMLHttpRequest()
             xhr.onload = function () {
-                const bodyElement = document.querySelector("body")
+
                 if (xhr.status == 200) {
-		            /* Part 2: Build the HTML elements here and append them to the body */ 
-                    bodyElement.append(reverseString(xhr.responseText))
-                } else {
+		            /* Part 2: Build the HTML elements here and append them to the body */
+                    const bodyElement = document.querySelector("body")
+
+                    const movies = JSON.parse(xhr.responseText);
+                    const movie1 = movies[0];
+                    const movie2 = movies[1];
+                    const movie3 = movies[2];
+                    
+                    for (const movie of movies)
+                    {
+                        const article_movie = document.createElement("article")
+                        const h1 = document.createElement("h1");
+                        const section_data = document.createElement("section");
+                        const section_plot = document.createElement("section");
+                        const section_beteiligte = document.createElement("section");
+                        const ul_directors = document.createElement("ul");
+                        const ul_writers = document.createElement("ul");
+                        const ul_actors = document.createElement("ul");
+                        const image = document.createElement("img");
+                        const header = document.createElement("header");
+                        
+                        const metascore = movie.Metascore ?? "nicht vorhanden";
+
+                        h1.innerHTML = movie.Title; 
+                        image.src = movie.Poster;
+                        image.alt = "The Poster of the movie " + movie.Title;
+                        header.append(h1, image)  
+
+                        section_data.innerHTML = "Runtime: " + movie.Runtime + "; Realeased on: " + movie.Released
+                                            + "<br>" + movie.Genres.join(", ")
+                                            + "<br>" + "Metascore: " + metascore + "; imdbRating: " +movie.imdbRating;
+                        section_data.classList.add("border");
+
+                        section_plot.innerHTML = movie.Plot;
+                        section_plot.classList.add("border");
+
+                        const h2_directos = document.createElement("h2");
+                        h2_directos.innerHTML = "Directors";
+                        for (const director of movie.Directors)
+                        {
+                            const li = document.createElement("li");
+                            li.innerHTML = director;
+                            ul_directors.append(li); 
+                        }
+                        section_beteiligte.append(h2_directos, ul_directors);
+
+
+                        const h2_writers = document.createElement("h2");
+                        h2_writers.innerHTML = "Writers";
+                        for (const writer of movie.Writers)
+                        {
+                            const li = document.createElement("li");
+                            li.innerHTML = writer;
+                            ul_writers.append(li); 
+                        }
+                        section_beteiligte.append(h2_writers, ul_writers);
+
+
+                        const h2_actors = document.createElement("h2");
+                        h2_actors.innerHTML = "Actors";
+                        for (const actor of movie.Actors)
+                        {
+                            const li = document.createElement("li");
+                            li.innerHTML = actor;
+                            ul_actors.append(li); 
+                        }
+                        section_beteiligte.append(h2_actors, ul_actors);
+
+                        article_movie.append(header, section_data, section_plot, section_beteiligte);
+                        bodyElement.append(article_movie);
+                        
+                    }
+                                       
+                } 
+                else {
                     bodyElement.append("Daten konnten nicht geladen werden, Status " + xhr.status + " - " + xhr.statusText)
                 }
             }
