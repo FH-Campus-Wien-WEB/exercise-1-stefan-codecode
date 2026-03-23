@@ -48,6 +48,9 @@
         .border{
             border-bottom: 2px solid black;
         }
+        .bold{
+            font-weight: bold;
+        }
 
 
     </style>
@@ -61,9 +64,6 @@
                     const bodyElement = document.querySelector("body")
 
                     const movies = JSON.parse(xhr.responseText);
-                    const movie1 = movies[0];
-                    const movie2 = movies[1];
-                    const movie3 = movies[2];
                     
                     for (const movie of movies)
                     {
@@ -85,7 +85,7 @@
                         image.alt = "The Poster of the movie " + movie.Title;
                         header.append(h1, image)  
 
-                        section_data.innerHTML = "Runtime: " + movie.Runtime + "; Realeased on: " + movie.Released
+                        section_data.innerHTML = "Runtime: <span class = 'bold'>" + movie.Runtime + "</span>; Realeased on: " + movie.Released
                                             + "<br>" + movie.Genres.join(", ")
                                             + "<br>" + "Metascore: " + metascore + "; imdbRating: " +movie.imdbRating;
                         section_data.classList.add("border");
